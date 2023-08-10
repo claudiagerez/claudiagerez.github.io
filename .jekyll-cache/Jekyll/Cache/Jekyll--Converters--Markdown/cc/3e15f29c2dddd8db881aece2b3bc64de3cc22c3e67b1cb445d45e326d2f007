@@ -1,19 +1,19 @@
-I"uI<h2 id="introduction">Introduction</h2>
+I"GL<h2 id="introduction">Introduction</h2>
 
 <p>I got an interesting exercise to work on using SQL. Since the data was
 available in a data frame format, I thought I could use SQL within R to
 solve it.</p>
 
 <p>To run SQL in R, I use the
-<a href="https://www.rdocumentation.org/packages/sqldf/versions/0.4-11"><code class="highlighter-rouge">sqldf package</code></a>.</p>
+<a href="https://www.rdocumentation.org/packages/sqldf/versions/0.4-11"><code class="language-plaintext highlighter-rouge">sqldf package</code></a>.</p>
 
-<p>The sqldf package is very simple to use. The main function is <code class="highlighter-rouge">sqldf()</code>,
+<p>The sqldf package is very simple to use. The main function is <code class="language-plaintext highlighter-rouge">sqldf()</code>,
 and what it does is to set up a database, it imports the data frame into
 the database, it performs the SQL select or other statement passed to
 the function, and returns the result using a heuristic to determine
 which class to assign to each column of the returned data frame.</p>
 
-<p>All my SQL statements will be wrapped up by <code class="highlighter-rouge">sqldf()</code>.</p>
+<p>All my SQL statements will be wrapped up by <code class="language-plaintext highlighter-rouge">sqldf()</code>.</p>
 
 <h2 id="preparing-the-data">Preparing the data</h2>
 
@@ -21,7 +21,7 @@ which class to assign to each column of the returned data frame.</p>
 purchase_revenue and purchase_date by customer_id. Here is the code I
 use to prepare the data.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Load required packages
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Load required packages
 library(tidyverse)
 library(sqldf)
 library(lubridate)
@@ -120,7 +120,7 @@ Here I’m going to explain two ways:</p>
 <p>It would be simple to write a SQL query returning the cumulative revenue
 for all customers.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT SUM(purchase_revenue) as cumulative_revenue
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT SUM(purchase_revenue) as cumulative_revenue
 FROM test_orders
       ')
 
@@ -128,14 +128,14 @@ FROM test_orders
 ## 1             371.75
 </code></pre></div></div>
 
-<p>Aggregate functions like <code class="highlighter-rouge">SUM</code>, perform calculations across a set of
+<p>Aggregate functions like <code class="language-plaintext highlighter-rouge">SUM</code>, perform calculations across a set of
 rows and return a single output row.</p>
 
 <p>Similar to an aggregate function, a window function calculates on a set
 of rows, but unlike an aggregate function, a window function does not
 cause rows to become grouped into a single output row.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
     ,purchase_date
     ,purchase_revenue
     ,SUM(purchase_revenue) OVER () cumulative_revenue
@@ -156,18 +156,18 @@ FROM test_orders
 
 <p>The syntax of a windows function is as follows:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>window_function (expression) OVER
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>window_function (expression) OVER
      ( [ PARTITION BY expression_list ]
        [ ORDER BY order_list ]
        [ ROWS frame_clause ])
 </code></pre></div></div>
 
-<p>Window functions are initiated with the <code class="highlighter-rouge">OVER</code> clause, and are
+<p>Window functions are initiated with the <code class="language-plaintext highlighter-rouge">OVER</code> clause, and are
 configured using three concepts:</p>
 
-<p>*window partition (<code class="highlighter-rouge">PARTITION BY</code>) - groups rows into partitions *window
-ordering (<code class="highlighter-rouge">ORDER BY</code>) - defines the order or sequence of rows within
-each partition *window frame (<code class="highlighter-rouge">ROWS</code>) - defines the window by use of an
+<p>*window partition (<code class="language-plaintext highlighter-rouge">PARTITION BY</code>) - groups rows into partitions *window
+ordering (<code class="language-plaintext highlighter-rouge">ORDER BY</code>) - defines the order or sequence of rows within
+each partition *window frame (<code class="language-plaintext highlighter-rouge">ROWS</code>) - defines the window by use of an
 offset from the specified row</p>
 
 <p>Definitions:</p>
@@ -180,20 +180,20 @@ If you omit the PARTITION BY clause, the whole result set is treated
 as a single partition.</li>
   <li>order_list: Comma separated list of expressions. They can only
 refer to column names derived by the FROM clause.</li>
-  <li>frame_clause: Define the offset using <code class="highlighter-rouge">CURRENT ROW</code>,
-<code class="highlighter-rouge">_value_ PRECEDING</code>, <code class="highlighter-rouge">UNBOUNDED PRECEDING</code>, <code class="highlighter-rouge">_value_ FOLLOWING</code>,
-<code class="highlighter-rouge">UNBOUNDED FOLLOWING</code></li>
+  <li>frame_clause: Define the offset using <code class="language-plaintext highlighter-rouge">CURRENT ROW</code>,
+<code class="language-plaintext highlighter-rouge">_value_ PRECEDING</code>, <code class="language-plaintext highlighter-rouge">UNBOUNDED PRECEDING</code>, <code class="language-plaintext highlighter-rouge">_value_ FOLLOWING</code>,
+<code class="language-plaintext highlighter-rouge">UNBOUNDED FOLLOWING</code></li>
 </ul>
 
-<p>The documentation on the <code class="highlighter-rouge">OVER</code> clause for a SQL Server can be found
+<p>The documentation on the <code class="language-plaintext highlighter-rouge">OVER</code> clause for a SQL Server can be found
 <a href="https://docs.microsoft.com/en-us/sql/t-sql/queries/select-over-clause-transact-sql?view=sql-server-2017">here</a>.</p>
 
 <p>Going back to the exercise.</p>
 
 <p>Let’s say we want to calculate the cumulative_revenue by customer_id.
-One familiar way to do this is using <code class="highlighter-rouge">GROUP BY</code>.</p>
+One familiar way to do this is using <code class="language-plaintext highlighter-rouge">GROUP BY</code>.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
     ,SUM(purchase_revenue) AS cumulative_purchase
 FROM test_orders
 GROUP BY customer_id
@@ -208,15 +208,15 @@ GROUP BY customer_id
 <p>The query above returns three rows because we are grouping by
 customer_id and we have three distinct customers.</p>
 
-<p>The <code class="highlighter-rouge">GROUP BY</code> clause is used often used in conjunction with an
-aggregate function, in this case, <code class="highlighter-rouge">SUM()</code>. The <code class="highlighter-rouge">GROUP BY</code> clause reduces
+<p>The <code class="language-plaintext highlighter-rouge">GROUP BY</code> clause is used often used in conjunction with an
+aggregate function, in this case, <code class="language-plaintext highlighter-rouge">SUM()</code>. The <code class="language-plaintext highlighter-rouge">GROUP BY</code> clause reduces
 the number of rows returned by rolling them up and calculating the sums
 for each group.</p>
 
 <p>Now let’s calculate the cumulative_revenue by customer_id using the
-<code class="highlighter-rouge">PARTITION BY</code> clause.</p>
+<code class="language-plaintext highlighter-rouge">PARTITION BY</code> clause.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
     ,purchase_date
     ,purchase_revenue
     ,SUM(purchase_revenue) OVER (PARTITION BY customer_id) AS cummulative_revenue
@@ -236,10 +236,10 @@ ORDER BY customer_id
 ## 9           3 2015-10-03 01:15:24            11.30              113.66
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">PARTITION BY</code> clause divides the rows into partitions given by the
-customer_id column, the <code class="highlighter-rouge">SUM()</code> function is applied to each partition.</p>
+<p>The <code class="language-plaintext highlighter-rouge">PARTITION BY</code> clause divides the rows into partitions given by the
+customer_id column, the <code class="language-plaintext highlighter-rouge">SUM()</code> function is applied to each partition.</p>
 
-<p>As we can see, the <code class="highlighter-rouge">PARTITION BY</code> clause does not reduce the number of
+<p>As we can see, the <code class="language-plaintext highlighter-rouge">PARTITION BY</code> clause does not reduce the number of
 rows returned.</p>
 
 <p>Now, what we really want to find is the running total per customer. That
@@ -248,9 +248,9 @@ is a cummulative sum of the purchase_revenue by date.</p>
 <p>We want to sum the revenue by customer_id and we want to do that by
 date (from the oldest to newest), so we need to divide the data by
 customer_id and add up the purchase_revenue ordering the rows by
-purchase_date. We use <code class="highlighter-rouge">ORDER BY</code> in the <code class="highlighter-rouge">OVER</code> clause.</p>
+purchase_date. We use <code class="language-plaintext highlighter-rouge">ORDER BY</code> in the <code class="language-plaintext highlighter-rouge">OVER</code> clause.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
     ,purchase_date
     ,purchase_revenue
     ,SUM(purchase_revenue) OVER (
@@ -276,7 +276,7 @@ ORDER BY customer_id
 <p>To get the first date (YYYY-MM-DD) on which a customer’s cumulative
 purchase_revenue has reached $100, we add a filter.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf(' SELECT customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf(' SELECT customer_id
     ,purchase_date
     ,running_total
 FROM (
@@ -317,7 +317,7 @@ to calculate the running total.</p>
 table over every row that has a date less than or equal to the date
 coming from the first table.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT t1.customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT t1.customer_id
     ,t1.purchase_revenue
     ,SUM(t2.purchase_revenue) AS running_total
 FROM test_orders t1
@@ -342,7 +342,7 @@ GROUP BY t2.customer_id
 
 <p>Which is the same as using the JOIN function</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT t1.customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT t1.customer_id
     ,t1.purchase_date
     ,t1.purchase_revenue
     ,SUM(t2.purchase_revenue) AS running_total
@@ -368,7 +368,7 @@ GROUP BY t2.customer_id
 <p>Filtering for the dates (YYYY-MM-DD) on which a customer’s cumulative
 purchase_revenue has reached or surpassed $100.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT t1.customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT t1.customer_id
     ,t1.purchase_date
     ,t1.purchase_revenue
     ,SUM(t2.purchase_revenue) AS running_total
@@ -391,7 +391,7 @@ HAVING SUM(t2.purchase_revenue) &gt;= 100
 which a customer’s cumulative purchase_revenue has reached $100. All I
 can come out with now is an outer filter.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqldf('SELECT customer_id
     ,DATE(
         MIN(purchase_date)
         ,"unixepoch"
@@ -436,13 +436,13 @@ current process.</p>
 
 <h5 id="self-join-execution-time">Self-Join execution time</h5>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
 ##   0.015   0.004   0.019
 </code></pre></div></div>
 
 <h4 id="window-function-execution-time">Window function execution time.</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    user  system elapsed 
 ##    0.02    0.00    0.02
 </code></pre></div></div>
 

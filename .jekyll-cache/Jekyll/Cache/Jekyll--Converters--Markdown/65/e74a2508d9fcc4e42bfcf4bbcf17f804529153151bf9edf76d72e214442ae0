@@ -1,4 +1,4 @@
-I"i3<h2 id="different-types-of-analytics">Different types of analytics</h2>
+I"|3<h2 id="different-types-of-analytics">Different types of analytics</h2>
 
 <p>Did you know that there are four types of analytics? We have descriptive, diagnostic, predictive and prescriptive analytics.</p>
 
@@ -118,7 +118,7 @@
 
 <p>On the other hand, you can also notice that there are a few segments that are doing much better (the maximum score is 2.9).  Those are the audience segments that we want to keep.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summary(segment$segment_score)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>summary(segment$segment_score)
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
  0.0000  0.0000  0.6342  0.8254  1.4259  2.9133
 </code></pre></div></div>

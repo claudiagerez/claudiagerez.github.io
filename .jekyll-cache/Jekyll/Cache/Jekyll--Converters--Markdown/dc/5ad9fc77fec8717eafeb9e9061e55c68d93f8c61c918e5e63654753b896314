@@ -1,4 +1,4 @@
-I"*'<h2 id="setting-up-for-success">Setting up for success</h2>
+I"¯'<h2 id="setting-up-for-success">Setting up for success</h2>
 
 <p>Last weekend I worked on defining <a href="http://claudiagerez.com/2018/05/31/mid-year/">mid-year goals</a>. One of my primary goals was to update this site on a weekly basis, documenting my journey as a Jr. Marketing Data Analyst.</p>
 
@@ -126,15 +126,15 @@
 <p>Some basic Git commands:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">git init</code> creates a new Git repository</li>
-  <li><code class="highlighter-rouge">git status</code> inspects the contents of the working directory and staging area</li>
-  <li><code class="highlighter-rouge">git add</code> adds files from the working directory and staging area</li>
-  <li><code class="highlighter-rouge">git diff</code> shows the difference between the working directory and the staging area</li>
-  <li><code class="highlighter-rouge">git commit</code> stores file changes permanently from the staging area in the repository</li>
-  <li><code class="highlighter-rouge">git log</code> shows a list of all previous commits</li>
+  <li><code class="language-plaintext highlighter-rouge">git init</code> creates a new Git repository</li>
+  <li><code class="language-plaintext highlighter-rouge">git status</code> inspects the contents of the working directory and staging area</li>
+  <li><code class="language-plaintext highlighter-rouge">git add</code> adds files from the working directory and staging area</li>
+  <li><code class="language-plaintext highlighter-rouge">git diff</code> shows the difference between the working directory and the staging area</li>
+  <li><code class="language-plaintext highlighter-rouge">git commit</code> stores file changes permanently from the staging area in the repository</li>
+  <li><code class="language-plaintext highlighter-rouge">git log</code> shows a list of all previous commits</li>
 </ul>
 
-<p>Note that <a href="https://www.quora.com/What-is-the-difference-between-Git-and-GitHub">GitHub is a hosting service for Git repositories</a>.  My working directory is a folder called <code class="highlighter-rouge">clau_jekyll_site</code> on my computer.  I store my Jekyll site project on <a href="https://github.com/claudiagerezmi/claudiagerezmi.github.io">GitHub</a>.</p>
+<p>Note that <a href="https://www.quora.com/What-is-the-difference-between-Git-and-GitHub">GitHub is a hosting service for Git repositories</a>.  My working directory is a folder called <code class="language-plaintext highlighter-rouge">clau_jekyll_site</code> on my computer.  I store my Jekyll site project on <a href="https://github.com/claudiagerezmi/claudiagerezmi.github.io">GitHub</a>.</p>
 
 <h4 id="deploy-your-website-to-github-pages-summary">Deploy your website to GitHub Pages summary</h4>
 

@@ -11,7 +11,7 @@ logo:               # Logo image URL
 description:        Documenting my journey as a marketing analyst.
 baseurl:            '' # The subpath of your site, e.g. /blog
 url:                'https://claudiagerez.com' # The base hostname & protocol for your site
-linkedin: 	    https://www.linkedin.com/in/claudiagerez/
+linkedin: 	        https://www.linkedin.com/in/claudiagerez/
 github:             https://github.com/claudiagerez
 facebook:           https://www.facebook.com/claudia.gerez.52
 twitter:
@@ -24,11 +24,9 @@ paginate:  11
 sass:
   style: compressed
 
-gems:
+plugins:
   - jekyll-paginate
   - jekyll/tagging
-
-plugins: [jekyll-paginate]
 
 include:
   - _pages
@@ -54,7 +52,7 @@ defaults:
 authors:
   Claudia:
     name:     Claudia Gerez
-    bio:      Chemical Engineer. Marketing Analyst. Data Scientist in the making.
+    bio:      Data Engineer | Data Analyst | Data Scientist
     gravatar: https://secure.gravatar.com/avatar/ca7b3c0d266cf63182643ae134937b51
     email:    cgerezmiranda@gmail.com
     website:  http://claudiagerez.com
