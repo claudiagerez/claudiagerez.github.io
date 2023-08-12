@@ -1,7 +1,7 @@
 <div class='o-grid__col o-grid__col--4-4-s o-grid__col--2-4-m o-grid__col--1-3-l c-post-card-wrap js-post-card-wrap
 {% if page.url == '/' %} {% if forloop.first == true %} o-grid__col--4-4-m o-grid__col--2-3-l {% endif %} {% endif %}'>
 
-<div class='c-post-card {% if page.url == '/' %} {% if forloop.first == true %} c-post-card--first {% endif %} {% if forloop.last == true %} c-post-card--last {% endif %} {% endif %}'>
+<div class='c-post-card {% if page.url == '/' %} {% if forloop.first == true %} c-post-card--first {% endif %} {% endif %}'>
     <div class='c-post-card__media'>
       <a href='{{ post.url | prepend: site.baseurl }}' class='c-post-card__image js-fadein' style='background-image: url({{ post.image | prepend: site.baseurl }})'>
         {% if post.featured %}
