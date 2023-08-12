@@ -36,10 +36,25 @@ exclude:
   - Gemfile
   - Gemfile.lock
 
+navigation:
+  - title: Home
+    url: /
+  - title: Blog
+    url: /blog
+  - title: Learning Resources
+    url: /learning-resources
+  - title: About Me
+    url: /about
+
 # Tags
 tag_page_dir:         tag
 tag_page_layout:      tag_page
 tag_permalink_style:  pretty
+
+# Collections
+collections:
+  notes:
+    output: true
 
 # Pages path
 defaults:

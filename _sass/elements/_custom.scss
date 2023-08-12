@@ -44,6 +44,35 @@ li {
   }
 }
 
+/*------------------------------------*\
+  Custom Styles - Notes CSS
+\*------------------------------------*/
+
+.notes-list-header {
+  margin-top: 0em;
+  margin-bottom: 2em; /* Increase the space between the h3 header and the list */
+}
+
+.notes-list {
+  list-style: none; /* Removes bullet points from the list */
+  padding: 0; /* Removes default padding from the list */
+}
+
+.notes-list li {
+  margin-bottom: 2em; /* Increase the space between list elements */
+}
+
+.notes-title {
+  font-size: 1.5em; /* Make the post title font bigger */
+  display: block; /* Make it a block element to take up the full width */
+  margin-bottom: 0.25em; /* Space between the title and the date */
+  text-decoration: none !important; /* Remove the underline */
+}
+
+.notes-date {
+  font-size: 0.9em; /* Make the date font smaller */
+}
+
 
 
 /*------------------------------------*\
