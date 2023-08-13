@@ -2,7 +2,7 @@
 title: About clustering and segmentation
 date: 2018-06-29
 author: Claudia
-layout: post
+layout: notes
 image: '/images/posts/main/perfect-audience-3.jpg'
 tags: [marketing-analytics, data-analytics]
 ---

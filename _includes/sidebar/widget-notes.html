@@ -1,0 +1,15 @@
+<div class='c-widget'>
+  <h5 class='c-widget__title'>Recent Stories</h5>
+
+  {% assign reversed_posts = site.notes | reverse %}
+  {% for post in reversed_posts limit:10 %}
+    {% if post.url != page.url %}
+      <a href='{{ post.url }}' class='c-teaser'>
+        <div class='c-teaser__content'>
+          <h3 class='c-teaser__title'>{{ post.title }}</h3>
+          <time class='c-teaser__date' datetime='{{ post.date | date: '%d %b %Y' }}' title='{{ post.date | date: '%d %b %Y' }}'>{{ post.date | date: '%d %b %Y' }}</time>
+        </div>
+      </a>
+    {% endif %}
+  {% endfor %}
+</div>

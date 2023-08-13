@@ -2,7 +2,7 @@
 title: SQL Practice - Understanding Running Totals
 date: 2020-04-23
 author: Claudia
-layout: post
+layout: notes
 image: '/images/posts/main/20200423-sql-running-totals.jpg'
 tags: [learning]
 ---

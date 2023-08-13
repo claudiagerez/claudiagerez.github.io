@@ -59,6 +59,14 @@
     letter-spacing: $global-letter-spacing;
   }
 
+  &__title_notes {
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+    font-family: $font-serif;
+    font-size: $font-size-h2;
+    text-align: center;
+  }
+  
   &__title {
     margin-bottom: 0;
     font-family: $font-serif;
