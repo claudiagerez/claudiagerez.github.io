@@ -14,12 +14,12 @@ code {
   word-break: break-all;
 
   font-family: $font-monospace;
-  font-size: $font-size-medium;
+  font-size: $font-size-small; //change to small from medium, same with the line-height
   background-color: $bg-gray;
 }
 
 p code,
-li code { padding: half(quarter($line-height-medium)) quarter($line-height-medium); }
+li code { padding: half(quarter($line-height-small)) quarter($line-height-small); }
 
 // Prism.js Customization
 

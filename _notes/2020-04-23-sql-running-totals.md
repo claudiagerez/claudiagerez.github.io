@@ -32,26 +32,28 @@ This exercise uses a simple table containing info about
 purchase\_revenue and purchase\_date by customer\_id. Here is the code I
 use to prepare the data.
 
-    # Load required packages
-    library(tidyverse)
-    library(sqldf)
-    library(lubridate)
-    library(knitr)
-    library(tictoc)
+{% highlight r %}
+# Load required packages
+library(tidyverse)
+library(sqldf)
+library(lubridate)
+library(knitr)
+library(tictoc)
 
-    # I chose to work with a SQLite DBMS
-    options(sqldf.driver = "SQLite")
+# I chose to work with a SQLite DBMS
+options(sqldf.driver = "SQLite")
 
-    # Create the columns of the data frame
-    customer_id <- c(1, 2, 3, 2, 2, 3, 1, 3, 2)
-    purchase_date <- c("2015-01-01 14:32:51", "2015-01-02 12:14:51", "2015-01-02 18:08:21", "2015-03-02 23:42:21", "2015-04-02 23:42:21", "2015-07-03 22:07:11", "2015-09-03 21:02:41", "2015-10-03 05:15:24", "2015-10-03 07:11:56")
-    purchase_revenue <- c(25.34, 34.34, 37.15, 47.24, 54.12, 65.21, 74.60, 11.30, 22.45)
+# Create the columns of the data frame
+customer_id <- c(1, 2, 3, 2, 2, 3, 1, 3, 2)
+purchase_date <- c("2015-01-01 14:32:51", "2015-01-02 12:14:51", "2015-01-02 18:08:21", "2015-03-02 23:42:21", "2015-04-02 23:42:21", "2015-07-03 22:07:11", "2015-09-03 21:02:41", "2015-10-03 05:15:24", "2015-10-03 07:11:56")
+purchase_revenue <- c(25.34, 34.34, 37.15, 47.24, 54.12, 65.21, 74.60, 11.30, 22.45)
 
-    # Create the data frame "test_orders"
-    test_orders <- data.frame(customer_id, purchase_date, purchase_revenue)
+# Create the data frame "test_orders"
+test_orders <- data.frame(customer_id, purchase_date, purchase_revenue)
 
-    # Make sure the purchase_date column has a date format
-    test_orders$purchase_date <- ymd_hms(test_orders$purchase_date)
+# Make sure the purchase_date column has a date format
+test_orders$purchase_date <- ymd_hms(test_orders$purchase_date)
+{% endhighlight %}
 
 <table>
 <caption>Test Orders Table</caption>
@@ -129,12 +131,14 @@ Here I’m going to explain two ways:
 It would be simple to write a SQL query returning the cumulative revenue
 for all customers.
 
-    sqldf('SELECT SUM(purchase_revenue) as cumulative_revenue
-    FROM test_orders
-          ')
+{% highlight r %}
+sqldf('SELECT SUM(purchase_revenue) as cumulative_revenue
+FROM test_orders
+        ')
 
-    ##   cumulative_revenue
-    ## 1             371.75
+##   cumulative_revenue
+## 1             371.75
+{% endhighlight %}
 
 Aggregate functions like `SUM`, perform calculations across a set of
 rows and return a single output row.
@@ -143,30 +147,34 @@ Similar to an aggregate function, a window function calculates on a set
 of rows, but unlike an aggregate function, a window function does not
 cause rows to become grouped into a single output row.
 
-    sqldf('SELECT customer_id
-        ,purchase_date
-        ,purchase_revenue
-        ,SUM(purchase_revenue) OVER () cumulative_revenue
-    FROM test_orders
-          ')
+{% highlight r %}
+sqldf('SELECT customer_id
+    ,purchase_date
+    ,purchase_revenue
+    ,SUM(purchase_revenue) OVER () cumulative_revenue
+FROM test_orders
+        ')
 
-    ##   customer_id       purchase_date purchase_revenue cumulative_revenue
-    ## 1           1 2015-01-01 09:32:51            25.34             371.75
-    ## 2           2 2015-01-02 07:14:51            34.34             371.75
-    ## 3           3 2015-01-02 13:08:21            37.15             371.75
-    ## 4           2 2015-03-02 18:42:21            47.24             371.75
-    ## 5           2 2015-04-02 19:42:21            54.12             371.75
-    ## 6           3 2015-07-03 18:07:11            65.21             371.75
-    ## 7           1 2015-09-03 17:02:41            74.60             371.75
-    ## 8           3 2015-10-03 01:15:24            11.30             371.75
-    ## 9           2 2015-10-03 03:11:56            22.45             371.75
+##   customer_id       purchase_date purchase_revenue cumulative_revenue
+## 1           1 2015-01-01 09:32:51            25.34             371.75
+## 2           2 2015-01-02 07:14:51            34.34             371.75
+## 3           3 2015-01-02 13:08:21            37.15             371.75
+## 4           2 2015-03-02 18:42:21            47.24             371.75
+## 5           2 2015-04-02 19:42:21            54.12             371.75
+## 6           3 2015-07-03 18:07:11            65.21             371.75
+## 7           1 2015-09-03 17:02:41            74.60             371.75
+## 8           3 2015-10-03 01:15:24            11.30             371.75
+## 9           2 2015-10-03 03:11:56            22.45             371.75
+{% endhighlight %}
 
 The syntax of a windows function is as follows:
 
-    window_function (expression) OVER
-         ( [ PARTITION BY expression_list ]
-           [ ORDER BY order_list ]
-           [ ROWS frame_clause ])
+{% highlight r %}
+window_function (expression) OVER
+        ( [ PARTITION BY expression_list ]
+        [ ORDER BY order_list ]
+        [ ROWS frame_clause ])
+{% endhighlight %}
 
 Window functions are initiated with the `OVER` clause, and are
 configured using three concepts:
@@ -197,16 +205,18 @@ Going back to the exercise.
 Let’s say we want to calculate the cumulative\_revenue by customer\_id.
 One familiar way to do this is using `GROUP BY`.
 
-    sqldf('SELECT customer_id
-        ,SUM(purchase_revenue) AS cumulative_purchase
-    FROM test_orders
-    GROUP BY customer_id
-          ')
+{% highlight r %}
+sqldf('SELECT customer_id
+    ,SUM(purchase_revenue) AS cumulative_purchase
+FROM test_orders
+GROUP BY customer_id
+        ')
 
-    ##   customer_id cumulative_purchase
-    ## 1           1               99.94
-    ## 2           2              158.15
-    ## 3           3              113.66
+##   customer_id cumulative_purchase
+## 1           1               99.94
+## 2           2              158.15
+## 3           3              113.66
+{% endhighlight %}
 
 The query above returns three rows because we are grouping by
 customer\_id and we have three distinct customers.
@@ -219,24 +229,26 @@ for each group.
 Now let’s calculate the cumulative\_revenue by customer\_id using the
 `PARTITION BY` clause.
 
-    sqldf('SELECT customer_id
-        ,purchase_date
-        ,purchase_revenue
-        ,SUM(purchase_revenue) OVER (PARTITION BY customer_id) AS cummulative_revenue
-    FROM test_orders
-    ORDER BY customer_id
-          ')
+{% highlight r %}
+sqldf('SELECT customer_id
+    ,purchase_date
+    ,purchase_revenue
+    ,SUM(purchase_revenue) OVER (PARTITION BY customer_id) AS cummulative_revenue
+FROM test_orders
+ORDER BY customer_id
+        ')
 
-    ##   customer_id       purchase_date purchase_revenue cummulative_revenue
-    ## 1           1 2015-01-01 09:32:51            25.34               99.94
-    ## 2           1 2015-09-03 17:02:41            74.60               99.94
-    ## 3           2 2015-01-02 07:14:51            34.34              158.15
-    ## 4           2 2015-03-02 18:42:21            47.24              158.15
-    ## 5           2 2015-04-02 19:42:21            54.12              158.15
-    ## 6           2 2015-10-03 03:11:56            22.45              158.15
-    ## 7           3 2015-01-02 13:08:21            37.15              113.66
-    ## 8           3 2015-07-03 18:07:11            65.21              113.66
-    ## 9           3 2015-10-03 01:15:24            11.30              113.66
+##   customer_id       purchase_date purchase_revenue cummulative_revenue
+## 1           1 2015-01-01 09:32:51            25.34               99.94
+## 2           1 2015-09-03 17:02:41            74.60               99.94
+## 3           2 2015-01-02 07:14:51            34.34              158.15
+## 4           2 2015-03-02 18:42:21            47.24              158.15
+## 5           2 2015-04-02 19:42:21            54.12              158.15
+## 6           2 2015-10-03 03:11:56            22.45              158.15
+## 7           3 2015-01-02 13:08:21            37.15              113.66
+## 8           3 2015-07-03 18:07:11            65.21              113.66
+## 9           3 2015-10-03 01:15:24            11.30              113.66
+{% endhighlight %}
 
 The `PARTITION BY` clause divides the rows into partitions given by the
 customer\_id column, the `SUM()` function is applied to each partition.
@@ -252,7 +264,39 @@ date (from the oldest to newest), so we need to divide the data by
 customer\_id and add up the purchase\_revenue ordering the rows by
 purchase\_date. We use `ORDER BY` in the `OVER` clause.
 
-    sqldf('SELECT customer_id
+{% highlight r %}
+sqldf('SELECT customer_id
+    ,purchase_date
+    ,purchase_revenue
+    ,SUM(purchase_revenue) OVER (
+        PARTITION BY customer_id 
+        ORDER BY purchase_date
+        ) AS running_total
+FROM test_orders
+ORDER BY customer_id
+        ')
+
+##   customer_id       purchase_date purchase_revenue running_total
+## 1           1 2015-01-01 09:32:51            25.34         25.34
+## 2           1 2015-09-03 17:02:41            74.60         99.94
+## 3           2 2015-01-02 07:14:51            34.34         34.34
+## 4           2 2015-03-02 18:42:21            47.24         81.58
+## 5           2 2015-04-02 19:42:21            54.12        135.70
+## 6           2 2015-10-03 03:11:56            22.45        158.15
+## 7           3 2015-01-02 13:08:21            37.15         37.15
+## 8           3 2015-07-03 18:07:11            65.21        102.36
+## 9           3 2015-10-03 01:15:24            11.30        113.66
+{% endhighlight %}
+
+To get the first date (YYYY-MM-DD) on which a customer’s cumulative
+purchase\_revenue has reached $100, we add a filter.
+
+{% highlight r %}
+sqldf(' SELECT customer_id
+    ,purchase_date
+    ,running_total
+FROM (
+    SELECT customer_id
         ,purchase_date
         ,purchase_revenue
         ,SUM(purchase_revenue) OVER (
@@ -260,43 +304,15 @@ purchase\_date. We use `ORDER BY` in the `OVER` clause.
             ORDER BY purchase_date
             ) AS running_total
     FROM test_orders
-    ORDER BY customer_id
-          ')
+    )
+WHERE running_total >= 100
+GROUP BY customer_id
+        ')
 
-    ##   customer_id       purchase_date purchase_revenue running_total
-    ## 1           1 2015-01-01 09:32:51            25.34         25.34
-    ## 2           1 2015-09-03 17:02:41            74.60         99.94
-    ## 3           2 2015-01-02 07:14:51            34.34         34.34
-    ## 4           2 2015-03-02 18:42:21            47.24         81.58
-    ## 5           2 2015-04-02 19:42:21            54.12        135.70
-    ## 6           2 2015-10-03 03:11:56            22.45        158.15
-    ## 7           3 2015-01-02 13:08:21            37.15         37.15
-    ## 8           3 2015-07-03 18:07:11            65.21        102.36
-    ## 9           3 2015-10-03 01:15:24            11.30        113.66
-
-To get the first date (YYYY-MM-DD) on which a customer’s cumulative
-purchase\_revenue has reached $100, we add a filter.
-
-    sqldf(' SELECT customer_id
-        ,purchase_date
-        ,running_total
-    FROM (
-        SELECT customer_id
-            ,purchase_date
-            ,purchase_revenue
-            ,SUM(purchase_revenue) OVER (
-                PARTITION BY customer_id 
-                ORDER BY purchase_date
-                ) AS running_total
-        FROM test_orders
-        )
-    WHERE running_total >= 100
-    GROUP BY customer_id
-          ')
-
-    ##   customer_id       purchase_date running_total
-    ## 1           2 2015-04-02 19:42:21        135.70
-    ## 2           3 2015-07-03 18:07:11        102.36
+##   customer_id       purchase_date running_total
+## 1           2 2015-04-02 19:42:21        135.70
+## 2           3 2015-07-03 18:07:11        102.36
+{% endhighlight %}
 
 *Note: Here I’m using a group-by trick to get the first ocurrence of a
 value higher than $100. MySQL allows you to not aggregate the
@@ -317,56 +333,92 @@ More especifically, we take the sum of purchase\_revenue in the second
 table over every row that has a date less than or equal to the date
 coming from the first table.
 
-    sqldf('SELECT t1.customer_id
-        ,t1.purchase_revenue
-        ,SUM(t2.purchase_revenue) AS running_total
-    FROM test_orders t1
-        ,test_orders t2
-    WHERE t1.purchase_date >= t2.purchase_date
-        AND t1.customer_id = t2.customer_id
-    GROUP BY t2.customer_id
-        ,t1.purchase_date
-          ')
+{% highlight r %}
+sqldf('SELECT t1.customer_id
+    ,t1.purchase_revenue
+    ,SUM(t2.purchase_revenue) AS running_total
+FROM test_orders t1
+    ,test_orders t2
+WHERE t1.purchase_date >= t2.purchase_date
+    AND t1.customer_id = t2.customer_id
+GROUP BY t2.customer_id
+    ,t1.purchase_date
+        ')
 
-    ##   customer_id purchase_revenue running_total
-    ## 1           1            25.34         25.34
-    ## 2           1            74.60         99.94
-    ## 3           2            34.34         34.34
-    ## 4           2            47.24         81.58
-    ## 5           2            54.12        135.70
-    ## 6           2            22.45        158.15
-    ## 7           3            37.15         37.15
-    ## 8           3            65.21        102.36
-    ## 9           3            11.30        113.66
+##   customer_id purchase_revenue running_total
+## 1           1            25.34         25.34
+## 2           1            74.60         99.94
+## 3           2            34.34         34.34
+## 4           2            47.24         81.58
+## 5           2            54.12        135.70
+## 6           2            22.45        158.15
+## 7           3            37.15         37.15
+## 8           3            65.21        102.36
+## 9           3            11.30        113.66
+{% endhighlight %}
 
 Which is the same as using the JOIN function
 
-    sqldf('SELECT t1.customer_id
-        ,t1.purchase_date
-        ,t1.purchase_revenue
-        ,SUM(t2.purchase_revenue) AS running_total
-    FROM test_orders t1
-    INNER JOIN test_orders t2 ON t1.purchase_date >= t2.purchase_date
-        AND t1.customer_id = t2.customer_id
-    GROUP BY t2.customer_id
-        ,t1.purchase_date
-          ')
+{% highlight r %}
+sqldf('SELECT t1.customer_id
+    ,t1.purchase_date
+    ,t1.purchase_revenue
+    ,SUM(t2.purchase_revenue) AS running_total
+FROM test_orders t1
+INNER JOIN test_orders t2 ON t1.purchase_date >= t2.purchase_date
+    AND t1.customer_id = t2.customer_id
+GROUP BY t2.customer_id
+    ,t1.purchase_date
+        ')
 
-    ##   customer_id       purchase_date purchase_revenue running_total
-    ## 1           1 2015-01-01 09:32:51            25.34         25.34
-    ## 2           1 2015-09-03 17:02:41            74.60         99.94
-    ## 3           2 2015-01-02 07:14:51            34.34         34.34
-    ## 4           2 2015-03-02 18:42:21            47.24         81.58
-    ## 5           2 2015-04-02 19:42:21            54.12        135.70
-    ## 6           2 2015-10-03 03:11:56            22.45        158.15
-    ## 7           3 2015-01-02 13:08:21            37.15         37.15
-    ## 8           3 2015-07-03 18:07:11            65.21        102.36
-    ## 9           3 2015-10-03 01:15:24            11.30        113.66
+##   customer_id       purchase_date purchase_revenue running_total
+## 1           1 2015-01-01 09:32:51            25.34         25.34
+## 2           1 2015-09-03 17:02:41            74.60         99.94
+## 3           2 2015-01-02 07:14:51            34.34         34.34
+## 4           2 2015-03-02 18:42:21            47.24         81.58
+## 5           2 2015-04-02 19:42:21            54.12        135.70
+## 6           2 2015-10-03 03:11:56            22.45        158.15
+## 7           3 2015-01-02 13:08:21            37.15         37.15
+## 8           3 2015-07-03 18:07:11            65.21        102.36
+## 9           3 2015-10-03 01:15:24            11.30        113.66
+{% endhighlight %}
 
 Filtering for the dates (YYYY-MM-DD) on which a customer’s cumulative
 purchase\_revenue has reached or surpassed $100.
 
-    sqldf('SELECT t1.customer_id
+{% highlight r %}
+sqldf('SELECT t1.customer_id
+    ,t1.purchase_date
+    ,t1.purchase_revenue
+    ,SUM(t2.purchase_revenue) AS running_total
+FROM test_orders t1
+INNER JOIN test_orders t2 ON t1.purchase_date >= t2.purchase_date
+    AND t1.customer_id = t2.customer_id
+GROUP BY t2.customer_id
+    ,t1.purchase_date
+HAVING SUM(t2.purchase_revenue) >= 100
+        ')
+
+##   customer_id       purchase_date purchase_revenue running_total
+## 1           2 2015-04-02 19:42:21            54.12        135.70
+## 2           2 2015-10-03 03:11:56            22.45        158.15
+## 3           3 2015-07-03 18:07:11            65.21        102.36
+## 4           3 2015-10-03 01:15:24            11.30        113.66
+{% endhighlight %}
+
+I will have to make more research on how to get only the first date on
+which a customer’s cumulative purchase\_revenue has reached $100. All I
+can come out with now is an outer filter.
+
+{% highlight r %}
+sqldf('SELECT customer_id
+    ,DATE(
+        MIN(purchase_date)
+        ,"unixepoch"
+        ) AS purchase_date
+    ,running_total
+FROM (
+    SELECT t1.customer_id
         ,t1.purchase_date
         ,t1.purchase_revenue
         ,SUM(t2.purchase_revenue) AS running_total
@@ -376,45 +428,17 @@ purchase\_revenue has reached or surpassed $100.
     GROUP BY t2.customer_id
         ,t1.purchase_date
     HAVING SUM(t2.purchase_revenue) >= 100
-          ')
+    )
+GROUP BY customer_id
+        ')
 
-    ##   customer_id       purchase_date purchase_revenue running_total
-    ## 1           2 2015-04-02 19:42:21            54.12        135.70
-    ## 2           2 2015-10-03 03:11:56            22.45        158.15
-    ## 3           3 2015-07-03 18:07:11            65.21        102.36
-    ## 4           3 2015-10-03 01:15:24            11.30        113.66
+## Warning in structure(as.numeric(x), class = c("POSIXct", "POSIXt")): NAs
+## introduced by coercion
 
-I will have to make more research on how to get only the first date on
-which a customer’s cumulative purchase\_revenue has reached $100. All I
-can come out with now is an outer filter.
-
-    sqldf('SELECT customer_id
-        ,DATE(
-            MIN(purchase_date)
-            ,"unixepoch"
-            ) AS purchase_date
-        ,running_total
-    FROM (
-        SELECT t1.customer_id
-            ,t1.purchase_date
-            ,t1.purchase_revenue
-            ,SUM(t2.purchase_revenue) AS running_total
-        FROM test_orders t1
-        INNER JOIN test_orders t2 ON t1.purchase_date >= t2.purchase_date
-            AND t1.customer_id = t2.customer_id
-        GROUP BY t2.customer_id
-            ,t1.purchase_date
-        HAVING SUM(t2.purchase_revenue) >= 100
-        )
-    GROUP BY customer_id
-          ')
-
-    ## Warning in structure(as.numeric(x), class = c("POSIXct", "POSIXt")): NAs
-    ## introduced by coercion
-
-    ##   customer_id purchase_date running_total
-    ## 1           2          <NA>        135.70
-    ## 2           3          <NA>        102.36
+##   customer_id purchase_date running_total
+## 1           2          <NA>        135.70
+## 2           3          <NA>        102.36
+{% endhighlight %}
 
 ### Comparing the window function method vs. the self-join method
 
@@ -432,13 +456,17 @@ current process.
 
 ##### Self-Join execution time
 
-    ##    user  system elapsed 
-    ##   0.015   0.004   0.019
+{% highlight r %}
+##    user  system elapsed 
+##   0.015   0.004   0.019
+{% endhighlight %}
 
 #### Window function execution time.
 
-    ##    user  system elapsed 
-    ##    0.02    0.00    0.02
+{% highlight r %}
+##    user  system elapsed 
+##    0.02    0.00    0.02
+{% endhighlight %}
 
 The window function has an elapsed time about 10% faster than the self
 join function. Plus I believe it’s easier to write.
